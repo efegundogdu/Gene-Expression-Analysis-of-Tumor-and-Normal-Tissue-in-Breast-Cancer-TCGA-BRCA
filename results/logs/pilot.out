@@ -1,0 +1,71 @@
+14:48:49 pending: 52 protocol runs; ComBat-seq label sets: 6
+14:48:49 ComBat-seq workers: 2 (RAM total/avail = 31.7/17.9 GB)
+14:49:15 real_subA P1 real FP=12593 t=23.4s
+14:49:58 real_subA P2 real FP=12003 t=43.2s
+14:50:14 real_subA P7 real FP=12826 t=16.6s
+14:50:16 real_subA P4 real FP=12704 t=1.3s
+14:50:17 real_subA P6 real FP=12052 t=1.0s
+14:50:19 real_mixed_full P4 real FP=12532 t=1.9s
+14:50:21 real_mixed_full P6 real FP=12482 t=1.7s
+14:50:37 real_mixed_subA P1 real FP=12179 t=15.8s
+14:50:58 real_mixed_subA P2 real FP=12088 t=21.1s
+14:51:12 real_mixed_subA P7 real FP=12461 t=14.3s
+14:51:13 real_mixed_subA P4 real FP=12171 t=0.7s
+14:51:13 real_mixed_subA P6 real FP=12056 t=0.6s
+14:51:18 A_full P4 r000 FP=0 t=4.4s
+14:51:22 A_full P6 r000 FP=0 t=3.3s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+14:51:41 A_sub P1 r000 FP=181 t=19.5s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+14:52:29 A_sub P2 r000 FP=40 t=47.9s
+14:52:47 A_sub P7 r000 FP=213 t=18.1s
+14:52:49 A_sub P4 r000 FP=0 t=1.4s
+14:52:50 A_sub P6 r000 FP=0 t=1.2s
+14:52:54 Brand_full P4 r000 FP=0 t=3.8s
+14:52:57 Brand_full P6 r000 FP=0 t=3.0s
+14:53:01 Bconf_full P4 r000 FP=1643 t=3.8s
+14:53:04 Bconf_full P6 r000 FP=0 t=2.5s
+14:53:24 Brand_sub P1 r000 FP=332 t=19.7s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+14:53:57 Brand_sub P2 r000 FP=128 t=32.7s
+14:54:15 Brand_sub P7 r000 FP=228 t=18.2s
+14:54:16 Brand_sub P4 r000 FP=0 t=1.4s
+14:54:17 Brand_sub P6 r000 FP=0 t=1.1s
+14:54:37 Bconf_sub P1 r000 FP=206 t=20.1s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+14:55:10 Bconf_sub P2 r000 FP=48 t=32.7s
+14:55:12 Bconf_sub P5 r000 FP=327 t=2s
+14:55:30 Bconf_sub P3 r000 FP=217 t=18s
+14:55:48 Bconf_sub P7 r000 FP=173 t=17.9s
+14:55:50 Bconf_sub P4 r000 FP=0 t=1.4s
+14:55:51 Bconf_sub P6 r000 FP=0 t=1.0s
+14:55:53 C_full P4 r000 FP=0 t=1.9s
+14:55:55 C_full P6 r000 FP=0 t=1.7s
+14:56:11 C_sub P1 r000 FP=654 t=16.5s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+14:56:44 C_sub P2 r000 FP=25 t=32.4s
+14:57:02 C_sub P7 r000 FP=897 t=18.9s
+14:57:05 A_sub P5 r000 FP=0 t=2s
+14:57:26 A_sub P3 r000 FP=135 t=22s
+14:57:28 C_sub P4 r000 FP=0 t=0.8s
+14:57:29 C_sub P6 r000 FP=0 t=0.7s
+14:58:34 C_sub P5 r000 FP=0 t=1s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+14:58:53 C_sub P3 r000 FP=69 t=19s
+15:01:43 Brand_sub P5 r000 FP=0 t=2s
+15:02:05 Brand_sub P3 r000 FP=152 t=22s
+15:04:08 real_subA P5 real FP=12230 t=2s
+15:04:29 real_subA P3 real FP=12296 t=21s
+15:04:31 real_mixed_subA P5 real FP=12055 t=1s
+15:04:48 real_mixed_subA P3 real FP=12273 t=18s
+15:04:50 all done
