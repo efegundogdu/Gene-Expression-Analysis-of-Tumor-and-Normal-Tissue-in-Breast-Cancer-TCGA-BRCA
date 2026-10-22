@@ -1,10 +1,10 @@
 {
  "protocol": "P7",
  "n_used": 1208,
- "seconds": 22.18087589996867,
+ "seconds": 29.506549899931997,
  "combat_seconds": 0.0,
- "n_DEG": 3390,
- "n_up": 1729,
- "n_down": 1661,
+ "n_DEG": 3762,
+ "n_up": 1876,
+ "n_down": 1886,
  "n_pvalue_nan": 0
 }

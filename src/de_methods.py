@@ -171,11 +171,32 @@ def run_pydeseq2(counts: pd.DataFrame, meta: pd.DataFrame, design: str,
     return finalize(res)
 
 
-def winsorize_counts(counts: pd.DataFrame, q: float = 95) -> pd.DataFrame:
-    """Cap each gene at its q-th percentile across samples (rounded to integer)."""
+def winsorize_counts_global(counts: pd.DataFrame, q: float = 95) -> pd.DataFrame:
+    """Old P7 (kept for de_P7_global.csv): cap raw counts at the gene's q-th percentile
+    over all samples. Clips the minority condition (normals) on down-regulated genes."""
     cap = np.round(np.percentile(counts.to_numpy(), q, axis=1)).astype(np.int64)
     return pd.DataFrame(np.minimum(counts.to_numpy(), cap[:, None]),
                         index=counts.index, columns=counts.columns)
+
+
+def winsorize_counts(counts: pd.DataFrame, condition, q: float = 95) -> pd.DataFrame:
+    """P7 winsorization following Yang et al. 2024 (Genome Biol 25:282), within condition.
+
+    Counts are divided by DESeq2 size factors; per gene, normalized values above the
+    q-th percentile *of the same condition* are replaced by that percentile; values are
+    multiplied back by the size factors and rounded. Yang et al. do not state whether the
+    percentile is global or per group; per-condition avoids clipping the minority group.
+    """
+    x = counts.to_numpy(dtype=float)
+    sf = size_factors(counts.to_numpy())
+    norm = x / sf
+    condition = np.asarray(condition)
+    for c in pd.unique(condition):
+        idx = condition == c
+        cap = np.percentile(norm[:, idx], q, axis=1)
+        norm[:, idx] = np.minimum(norm[:, idx], cap[:, None])
+    out = np.round(norm * sf).astype(np.int64)
+    return pd.DataFrame(out, index=counts.index, columns=counts.columns)
 
 
 # ---------------------------------------------------------------- ComBat-seq (R sva)
@@ -313,7 +334,8 @@ def run_protocol(name: str, counts, samples, n_cpus=None) -> tuple[pd.DataFrame,
         res = rank_protocol(normalize(counts), is_tumor, samples["batch_group"].to_numpy())
         info["n_used"] = res.attrs["n_used"]
     elif name == "P7":
-        res = run_pydeseq2(winsorize_counts(counts), meta, "~condition", n_cpus)
+        res = run_pydeseq2(winsorize_counts(counts, samples["condition"]), meta,
+                           "~condition", n_cpus)
         info["n_used"] = len(samples)
     else:
         raise ValueError(name)
@@ -391,3 +413,64 @@ def summarize_protocols(protocols=PROTOCOLS) -> dict:
     jac.to_csv(TABLES / "de_jaccard.csv")
     markers.to_csv(TABLES / "de_markers.csv", index=False)
     return {"info": info, "jaccard": jac, "markers": markers, "results": res}
+
+
+# ---------------------------------------------------------------- common-LFC sensitivity
+
+# which DESeq2 estimate supplies the common log2FC for each protocol
+COMMON_LFC_SOURCE = {"P1": "P1", "P4": "P1", "P7": "P1",   # no batch adjustment
+                     "P2": "P2", "P6": "P2",                 # batch in the model / strata
+                     "P3": "P3", "P5": "P3"}                 # ComBat-seq adjusted counts
+TOP_N = 500
+
+
+def rank_strength(r: pd.DataFrame) -> pd.Series:
+    """Tie-breaker for genes with equal p-value: |Wald z|, |van Elteren z| or |CLES - 0.5|."""
+    if "lfcSE" in r:
+        return (r["log2FC_MLE"] / r["lfcSE"]).abs()
+    if "stat_z" in r:
+        return r["stat_z"].abs()
+    return (r["CLES"] - 0.5).abs()
+
+
+def top_genes(r: pd.DataFrame, n: int = TOP_N) -> list:
+    order = pd.DataFrame({"p": r["pvalue"].fillna(1.0), "s": -rank_strength(r).fillna(0)})
+    return order.sort_values(["p", "s"]).index[:n].tolist()
+
+
+def jaccard_matrix(sets: dict) -> pd.DataFrame:
+    names = list(sets)
+    m = pd.DataFrame(index=names, columns=names, dtype=float)
+    for a in names:
+        for b in names:
+            u = sets[a] | sets[b]
+            m.loc[a, b] = len(sets[a] & sets[b]) / len(u) if u else np.nan
+    return m
+
+
+def common_lfc_sensitivity(protocols=PROTOCOLS) -> dict:
+    out_dir = TABLES / "de_common_lfc"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    res = {p: load_protocol(p) for p in protocols}
+    rows, deg, top = [], {}, {}
+    for p in protocols:
+        r = res[p]
+        lfc = res[COMMON_LFC_SOURCE[p]]["log2FC"].reindex(r.index)
+        is_deg = (r["FDR"] < FDR_CUT) & (lfc.abs() > LFC_CUT)
+        direction = np.where(is_deg, np.where(lfc > 0, "up", "down"), "")
+        pd.DataFrame({"gene_name": r["gene_name"], "common_log2FC": lfc, "FDR": r["FDR"],
+                      "is_DEG": is_deg, "direction": direction}).to_csv(out_dir / f"de_{p}_common_lfc.csv")
+        deg[p] = set(r.index[is_deg])
+        top[p] = set(top_genes(r))
+        rows.append({"protocol": p, "lfc_source": COMMON_LFC_SOURCE[p],
+                     "n_DEG_own_lfc": int(r["is_DEG"].sum()), "n_DEG_common_lfc": int(is_deg.sum()),
+                     "n_up": int((direction == "up").sum()), "n_down": int((direction == "down").sum())})
+    summary = pd.DataFrame(rows).set_index("protocol")
+    jac = jaccard_matrix(deg)
+    jac_top = jaccard_matrix(top)
+    overlap_top = pd.DataFrame({a: {b: len(top[a] & top[b]) for b in protocols} for a in protocols})
+    summary.to_csv(out_dir / "summary.csv")
+    jac.to_csv(out_dir / "jaccard_common_lfc.csv")
+    jac_top.to_csv(out_dir / f"jaccard_top{TOP_N}.csv")
+    overlap_top.to_csv(out_dir / f"overlap_top{TOP_N}.csv")
+    return {"summary": summary, "jaccard": jac, "jaccard_top": jac_top, "overlap_top": overlap_top}
