@@ -1,0 +1,10 @@
+{
+ "protocol": "P2",
+ "n_used": 615,
+ "seconds": 70.79805669991765,
+ "combat_seconds": 0.0,
+ "n_DEG": 3711,
+ "n_up": 1906,
+ "n_down": 1805,
+ "n_pvalue_nan": 2
+}

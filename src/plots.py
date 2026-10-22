@@ -192,3 +192,50 @@ def make_stage2_figures(res: dict) -> list[Path]:
     return [fig2_pca(res["scores"], res["var_ratio"], s, res["pcv"]), fig_pc_r2(res["pcv"]),
             fig3_plate_heatmap(res["test_plate"]["table"]), fig_library_size(s),
             fig_pc3_by_plate(res["scores"], s)]
+
+
+# ---------------------------------------------------------------- stage 3
+
+def fig4_deg_counts(summary: pd.DataFrame) -> Path:
+    """Horizontal bars: up and down DEG count per protocol."""
+    style()
+    s = summary.iloc[::-1]
+    y = np.arange(len(s))
+    h = 0.38
+    fig, ax = plt.subplots(figsize=(7, 3.6))
+    ax.barh(y + h / 2, s["n_up"], height=h - 0.04, color=CONDITION_COLORS["tumor"], label="up in tumor")
+    ax.barh(y - h / 2, s["n_down"], height=h - 0.04, color=CONDITION_COLORS["normal"], label="down in tumor")
+    for yi, (u, d) in enumerate(zip(s["n_up"], s["n_down"])):
+        ax.text(u + 20, yi + h / 2, f"{u}", va="center", fontsize=7, color=INK2)
+        ax.text(d + 20, yi - h / 2, f"{d}", va="center", fontsize=7, color=INK2)
+    ax.set_yticks(y, s.index)
+    ax.set_xlabel("DEGs (FDR < 0.05, |log2FC| > 1)")
+    ax.set_title("DEG count per protocol", loc="left")
+    ax.grid(axis="y", visible=False)
+    ax.legend(loc="lower right")
+    return save(fig, "fig4_deg_counts.png")
+
+
+def fig_deg_jaccard(jac: pd.DataFrame) -> Path:
+    """Supplementary: pairwise Jaccard similarity of DEG sets."""
+    style()
+    cmap = LinearSegmentedColormap.from_list("seqblue", SEQ_BLUE)
+    fig, ax = plt.subplots(figsize=(4.6, 4))
+    lo = float(np.floor(jac.to_numpy().min() * 10) / 10)
+    im = ax.imshow(jac.to_numpy(), cmap=cmap, vmin=lo, vmax=1)
+    ax.grid(False)
+    ax.set_xticks(range(len(jac)), jac.columns)
+    ax.set_yticks(range(len(jac)), jac.index)
+    ax.tick_params(length=0)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    for i in range(len(jac)):
+        for j in range(len(jac)):
+            v = jac.iloc[i, j]
+            ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7,
+                    color=SURFACE if (v - lo) / (1 - lo) > 0.45 else INK2)
+    ax.set_title("DEG set Jaccard similarity", loc="left")
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    cb.outline.set_visible(False)
+    cb.ax.tick_params(colors=MUTED, labelsize=7)
+    return save(fig, "figS_deg_jaccard.png")

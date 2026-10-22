@@ -1,0 +1,10 @@
+{
+ "protocol": "P5",
+ "n_used": 1208,
+ "seconds": 712.4192821999313,
+ "combat_seconds": 707.9172846999718,
+ "n_DEG": 3590,
+ "n_up": 1082,
+ "n_down": 2508,
+ "n_pvalue_nan": 0
+}

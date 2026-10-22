@@ -1,0 +1,10 @@
+{
+ "protocol": "P4",
+ "n_used": 1208,
+ "seconds": 4.898466199985705,
+ "combat_seconds": 0.0,
+ "n_DEG": 3570,
+ "n_up": 1160,
+ "n_down": 2410,
+ "n_pvalue_nan": 0
+}
