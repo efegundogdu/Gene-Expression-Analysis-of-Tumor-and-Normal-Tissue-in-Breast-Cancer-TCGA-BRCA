@@ -328,6 +328,18 @@ def n_workers_for_ram(per_worker_gb: float, reserve_gb: float, cap: int, frac: f
     return int(max(1, min(cap, budget // per_worker_gb)))
 
 
+def kill_tree(proc: subprocess.Popen) -> None:
+    """Stop an R worker and its children (Rscript.exe starts a child R process on Windows)."""
+    if os.name == "nt":
+        subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
+    else:
+        proc.terminate()
+    try:
+        proc.wait(timeout=30)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+
+
 def launch_combat_worker(workdir: Path, counts: pd.DataFrame, batch: np.ndarray,
                          label_sets: pd.DataFrame) -> subprocess.Popen:
     workdir.mkdir(parents=True, exist_ok=True)
@@ -445,7 +457,7 @@ def run(datasets: list[str], b_full: int, b_sub: int, n_cpus: int, max_workers: 
         if STOP_FILE.exists():
             for w in workers:
                 if w["proc"] is not None and w["proc"].poll() is None:
-                    w["proc"].terminate()
+                    kill_tree(w["proc"])
             log("STOP file found: R workers terminated, exiting. Rerun the same command to resume.")
             return
         if process_combat_outputs():
@@ -522,6 +534,10 @@ def main(argv=None):
             print(line, flush=True)
             logf.write(line + "\n")
             logf.flush()
+        if os.name == "nt":
+            # keep Windows from idle-sleeping while this process runs (released on exit)
+            import ctypes
+            ctypes.windll.kernel32.SetThreadExecutionState(0x80000000 | 0x00000001)
         RUN_CONFIG.write_text(json.dumps({"b_full": args.b_full, "b_sub": args.b_sub}))
         log(f"run start: b_full={args.b_full} b_sub={args.b_sub} n_cpus={args.n_cpus}")
         run(args.datasets, args.b_full, args.b_sub, args.n_cpus, args.max_workers,

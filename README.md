@@ -48,6 +48,8 @@ Run it in the background (e.g. append `&` in bash, or a background task in Claud
 It writes progress to `results/logs/permutation.log` (one line per finished protocol run).
 ComBat-seq runs in parallel R processes; their number is chosen at start so that total
 RAM use stays below 70% of physical memory (`--max-workers` caps it, default 6).
+On Windows the runner asks the OS not to idle-sleep while it runs (released when it
+exits); closing a laptop lid still sleeps the machine.
 
 **Check progress** (safe at any time, also while running):
 
