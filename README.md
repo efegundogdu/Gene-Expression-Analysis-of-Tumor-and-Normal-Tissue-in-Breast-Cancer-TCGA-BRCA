@@ -38,7 +38,30 @@ All commands run from the repository root. Python is the project venv
 `data/processed/perm/labels_*.parquet`. If the label files are missing, recreate them
 with `python src/permutation.py labels --B 100` (deterministic, seed 42; same labels every time).
 
-**Start (or resume) the run** - the same command does both; finished work is skipped:
+**R packages.** Rscript is launched with `R_LIBS_USER` set to the project folder `.rlib/`
+(gitignored) holding `sva` and its dependencies. This matters on Windows: R libraries
+installed from inside a packaged app (such as the Claude desktop app) are redirected into
+that app's private storage and are invisible to a scheduled task. If `.rlib/` is missing,
+recreate it with `Rscript -e ".libPaths('.rlib'); install.packages('BiocManager', lib='.rlib',
+repos='https://cloud.r-project.org'); BiocManager::install('sva', lib='.rlib', ask=FALSE, type='binary')"`.
+
+**Recommended on Windows: start (or resume) as a scheduled task.** This keeps the run
+alive when a terminal or Claude session closes (a run started from a Claude session was
+killed when the session ended):
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\start_permutation_task.ps1
+```
+
+It registers the one-off task `TCGA_BRCA_permutation`, which runs
+`scripts/run_permutation_task.cmd` hidden. The wrapper appends to
+`results/logs/perm_task.log` (start time, runner exit code, final `status`) and deletes the
+task when the runner exits - whether finished, stopped with the STOP file, or failed. Check
+whether it is still running with `Get-ScheduledTask -TaskName TCGA_BRCA_permutation`
+(no task = not running). If an R worker fails, the runner logs `ERROR: ComBat-seq failed`
+in `results/logs/permutation.log` and stops instead of skipping P3/P5.
+
+**Start (or resume) the run directly** - the same command does both; finished work is skipped:
 
 ```bash
 .venv/Scripts/python -I -u src/permutation.py run --b-full 100 --b-sub 50 --n-cpus 8 >> results/logs/perm_run.out 2>&1

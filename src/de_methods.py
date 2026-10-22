@@ -210,6 +210,19 @@ def find_rscript() -> str:
     return "Rscript"
 
 
+R_LIB = ROOT / ".rlib"  # project-local R package library (sva and dependencies)
+
+
+def r_env() -> dict:
+    """Environment for Rscript: put the project's R library first when it exists, so R
+    finds sva no matter which user profile / app sandbox launched the process."""
+    env = os.environ.copy()
+    if R_LIB.exists():
+        env["R_LIBS_USER"] = str(R_LIB)
+        env["R_LIBS"] = str(R_LIB)
+    return env
+
+
 COMBAT_R = r'''
 suppressMessages(library(sva))
 args <- commandArgs(trailingOnly = TRUE)
@@ -254,7 +267,7 @@ def combat_seq_multi(counts: pd.DataFrame, batch: pd.Series, groups: pd.DataFram
         meta.to_csv(tmp / "meta.csv")
         (tmp / "combat.R").write_text(COMBAT_R, encoding="utf-8")
         out = subprocess.run([find_rscript(), str(tmp / "combat.R"), str(tmp)],
-                             capture_output=True, text=True)
+                             capture_output=True, text=True, env=r_env())
         if out.returncode != 0:
             raise RuntimeError(f"ComBat_seq failed:\n{out.stdout}\n{out.stderr}")
         print(out.stdout.strip().splitlines()[-1], flush=True)

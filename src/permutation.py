@@ -352,7 +352,7 @@ def launch_combat_worker(workdir: Path, counts: pd.DataFrame, batch: np.ndarray,
     (workdir / "combat.R").write_text(dm.COMBAT_R, encoding="utf-8")
     log = open(workdir / "worker.log", "a")
     return subprocess.Popen([dm.find_rscript(), str(workdir / "combat.R"), str(workdir)],
-                            stdout=log, stderr=subprocess.STDOUT)
+                            stdout=log, stderr=subprocess.STDOUT, env=dm.r_env())
 
 
 # ---------------------------------------------------------------- main runner
@@ -468,6 +468,11 @@ def run(datasets: list[str], b_full: int, b_sub: int, n_cpus: int, max_workers: 
                 process_combat_outputs()
                 if rc != 0:
                     log(f"R worker {w['id']} exited with {rc}; see {w['dir'] / 'worker.log'}")
+                    for other in workers:
+                        if other["proc"] is not None and other["proc"].poll() is None:
+                            kill_tree(other["proc"])
+                    log("ERROR: ComBat-seq failed, stopping the run (fix the R error, then resume).")
+                    raise SystemExit(2)
                 start_next(w)
         if other_jobs:
             d, p, rep = other_jobs.pop(0)
