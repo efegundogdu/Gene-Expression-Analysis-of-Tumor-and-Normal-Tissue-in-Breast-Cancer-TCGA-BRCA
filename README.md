@@ -65,6 +65,28 @@ limitations) is written in Stage 7. Method notes are collected here as decisions
   repeats the benchmark with the shared DESeq2 log2FC.
 - **UpSet plot** (Fig 6): intersection sizes come from `upsetplot.query`; the figure is
   drawn with matplotlib because upsetplot 0.9.0 plotting fails under pandas 3.
+- **Stage 6 enrichment** (`src/downstream.py`): gseapy 1.3.1 `enrichr` in offline mode
+  (hypergeometric test) on the Enrichr libraries GO_Biological_Process_2023 and
+  KEGG_2021_Human, downloaded once to `data/processed/enrichr/`; background = the 15317
+  tested genes. Top-20 terms = the 20 smallest adjusted p among terms with FDR < 0.05
+  (KEGG up lists have only 8-12 such terms, so their Jaccard uses fewer terms).
+- **Stage 6 classification**: nested stratified 5-fold CV (inner 5-fold grid search on
+  ROC-AUC; L1-LR C in {0.01, 0.1, 1}; RF 300 trees, max_features in {sqrt, 0.02}),
+  class_weight='balanced'. DEG selection is redone inside each outer training fold with
+  the protocol's own test (P1, P2, P4, P6, P7). P3 and P5 are not used as in-fold
+  selectors: ComBat-seq needs ~10 min per fold and there is no label-free way to adjust
+  the held-out fold. Size factors use a median-of-ratios reference from the training fold
+  only. ROC-AUC is at ceiling (>= 0.9994) for every protocol. When all C values tie on
+  inner AUC, GridSearchCV keeps the first (C = 0.01), giving a very sparse model that
+  misses normals at the 0.5 threshold in one fold (P7, P1_fixed: F1 normal ~0.72-0.75).
+  `core_fixed` and `P1_fixed` use gene lists chosen on all samples before CV, so they are
+  not nested estimates; they compare the two signatures under identical conditions.
+- **Robust core** (`results/tables/robust_core.csv`): DEG in P2, P3, P5 and P6 with the
+  same direction (2628 genes), minus genes significant in >= 5% of B-conf replicates of any
+  of them (964 genes; 674 removed through P5, 346 only through P5) -> 1664 genes. The
+  adipocyte markers ADH1B, FABP4 and LEP drop out because P5 flags them in 12-22% of B-conf
+  replicates (0% for P6), i.e. the P5 (ComBat-seq + Wilcoxon) false positives drive most
+  of the filtering.
 - **ComBat-seq** runs in R 4.6.1 with Bioconductor sva 3.60.0 through Rscript
   (inmoose has no Windows wheel).
 

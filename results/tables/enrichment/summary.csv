@@ -1,0 +1,29 @@
+protocol,direction,library,n_genes,n_terms_FDR<0.05,top_term
+P1,up,GO_Biological_Process_2023,2108,61,Mitotic Spindle Assembly Checkpoint Signaling (GO:0007094)
+P1,up,KEGG_2021_Human,2108,12,Systemic lupus erythematosus
+P1,down,GO_Biological_Process_2023,1626,235,Myofibril Assembly (GO:0030239)
+P1,down,KEGG_2021_Human,1626,49,Calcium signaling pathway
+P2,up,GO_Biological_Process_2023,1906,57,Mitotic Spindle Assembly Checkpoint Signaling (GO:0007094)
+P2,up,KEGG_2021_Human,1906,9,Systemic lupus erythematosus
+P2,down,GO_Biological_Process_2023,1805,291,Regulation Of Angiogenesis (GO:0045765)
+P2,down,KEGG_2021_Human,1805,48,Neuroactive ligand-receptor interaction
+P3,up,GO_Biological_Process_2023,1762,77,Mitotic Spindle Assembly Checkpoint Signaling (GO:0007094)
+P3,up,KEGG_2021_Human,1762,11,Systemic lupus erythematosus
+P3,down,GO_Biological_Process_2023,2042,264,Myofibril Assembly (GO:0030239)
+P3,down,KEGG_2021_Human,2042,63,Neuroactive ligand-receptor interaction
+P4,up,GO_Biological_Process_2023,1160,68,Microtubule Cytoskeleton Organization Involved In Mitosis (GO:1902850)
+P4,up,KEGG_2021_Human,1160,8,Systemic lupus erythematosus
+P4,down,GO_Biological_Process_2023,2410,233,Nervous System Development (GO:0007399)
+P4,down,KEGG_2021_Human,2410,61,Neuroactive ligand-receptor interaction
+P5,up,GO_Biological_Process_2023,1082,94,Mitotic Spindle Assembly Checkpoint Signaling (GO:0007094)
+P5,up,KEGG_2021_Human,1082,9,Systemic lupus erythematosus
+P5,down,GO_Biological_Process_2023,2508,294,Nervous System Development (GO:0007399)
+P5,down,KEGG_2021_Human,2508,57,Neuroactive ligand-receptor interaction
+P6,up,GO_Biological_Process_2023,1160,68,Microtubule Cytoskeleton Organization Involved In Mitosis (GO:1902850)
+P6,up,KEGG_2021_Human,1160,8,Systemic lupus erythematosus
+P6,down,GO_Biological_Process_2023,2403,214,Nervous System Development (GO:0007399)
+P6,down,KEGG_2021_Human,2403,61,Neuroactive ligand-receptor interaction
+P7,up,GO_Biological_Process_2023,1876,48,Mitotic Spindle Assembly Checkpoint Signaling (GO:0007094)
+P7,up,KEGG_2021_Human,1876,11,Systemic lupus erythematosus
+P7,down,GO_Biological_Process_2023,1886,272,Cell-Cell Adhesion Via Plasma-Membrane Adhesion Molecules (GO:0098742)
+P7,down,KEGG_2021_Human,1886,60,Neuroactive ligand-receptor interaction

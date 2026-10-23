@@ -1,0 +1,50 @@
+fold 0 P1: 3758 genes, AUC LR 1.0000 RF 0.9996, 30s
+fold 0 P2: 3706 genes, AUC LR 1.0000 RF 0.9994, 65s
+fold 0 P4: 3605 genes, AUC LR 1.0000 RF 0.9996, 11s
+fold 0 P6: 3599 genes, AUC LR 1.0000 RF 0.9996, 10s
+fold 0 P7: 3782 genes, AUC LR 0.9998 RF 0.9996, 28s
+fold 0 core_fixed: 1664 genes, AUC LR 0.9998 RF 0.9996, 7s
+fold 0 P1_fixed: 3734 genes, AUC LR 0.9998 RF 0.9994, 8s
+fold 1 P1: 3776 genes, AUC LR 1.0000 RF 1.0000, 29s
+fold 1 P2: 3730 genes, AUC LR 1.0000 RF 1.0000, 70s
+fold 1 P4: 3572 genes, AUC LR 1.0000 RF 1.0000, 11s
+fold 1 P6: 3556 genes, AUC LR 1.0000 RF 1.0000, 10s
+fold 1 P7: 3771 genes, AUC LR 1.0000 RF 1.0000, 28s
+fold 1 core_fixed: 1664 genes, AUC LR 1.0000 RF 1.0000, 6s
+fold 1 P1_fixed: 3734 genes, AUC LR 1.0000 RF 1.0000, 8s
+fold 2 P1: 3642 genes, AUC LR 0.9994 RF 0.9986, 29s
+fold 2 P2: 3663 genes, AUC LR 0.9994 RF 0.9992, 69s
+fold 2 P4: 3522 genes, AUC LR 0.9994 RF 0.9986, 11s
+fold 2 P6: 3512 genes, AUC LR 0.9994 RF 0.9986, 10s
+fold 2 P7: 3661 genes, AUC LR 0.9998 RF 0.9986, 27s
+fold 2 core_fixed: 1664 genes, AUC LR 0.9992 RF 0.9988, 6s
+fold 2 P1_fixed: 3734 genes, AUC LR 0.9998 RF 0.9986, 8s
+fold 3 P1: 3711 genes, AUC LR 0.9998 RF 0.9992, 30s
+fold 3 P2: 3656 genes, AUC LR 0.9998 RF 0.9992, 70s
+fold 3 P4: 3552 genes, AUC LR 0.9998 RF 0.9992, 11s
+fold 3 P6: 3538 genes, AUC LR 0.9998 RF 0.9994, 10s
+fold 3 P7: 3748 genes, AUC LR 0.9998 RF 0.9991, 28s
+fold 3 core_fixed: 1664 genes, AUC LR 1.0000 RF 0.9992, 6s
+fold 3 P1_fixed: 3734 genes, AUC LR 0.9998 RF 0.9992, 8s
+fold 4 P1: 3747 genes, AUC LR 0.9990 RF 0.9996, 30s
+fold 4 P2: 3754 genes, AUC LR 0.9990 RF 0.9996, 70s
+fold 4 P4: 3633 genes, AUC LR 0.9998 RF 0.9996, 11s
+fold 4 P6: 3617 genes, AUC LR 0.9994 RF 0.9996, 10s
+fold 4 P7: 3753 genes, AUC LR 0.9996 RF 0.9996, 29s
+fold 4 core_fixed: 1664 genes, AUC LR 0.9994 RF 0.9994, 7s
+fold 4 P1_fixed: 3734 genes, AUC LR 0.9990 RF 0.9996, 8s
+          name  model    kind  folds  n_genes  n_model_genes  roc_auc  roc_auc_sd  f1_tumor  f1_normal  f1_normal_sd  stability_selected  stability_L1-LR  stability_RF
+0           P1  L1-LR  nested      5   3726.8           77.0   0.9996      0.0004    0.9977     0.9785        0.0261              0.9159           0.2493        0.4331
+1           P1     RF  nested      5   3726.8           50.0   0.9994      0.0005    0.9954     0.9559        0.0216              0.9159           0.2493        0.4331
+2     P1_fixed  L1-LR   fixed      5   3734.0           59.4   0.9997      0.0004    0.9891     0.9223        0.1161              1.0000           0.1800        0.6005
+3     P1_fixed     RF   fixed      5   3734.0           50.0   0.9994      0.0005    0.9954     0.9563        0.0147              1.0000           0.1800        0.6005
+4           P2  L1-LR  nested      5   3701.8           88.8   0.9996      0.0004    0.9972     0.9743        0.0279              0.9096           0.3100        0.4424
+5           P2     RF  nested      5   3701.8           50.0   0.9995      0.0003    0.9959     0.9610        0.0175              0.9096           0.3100        0.4424
+6           P4  L1-LR  nested      5   3576.8           57.2   0.9998      0.0002    0.9968     0.9704        0.0315              0.9322           0.2039        0.4420
+7           P4     RF  nested      5   3576.8           50.0   0.9994      0.0005    0.9963     0.9650        0.0291              0.9322           0.2039        0.4420
+8           P6  L1-LR  nested      5   3564.4           83.2   0.9997      0.0003    0.9972     0.9743        0.0233              0.9313           0.2997        0.4524
+9           P6     RF  nested      5   3564.4           50.0   0.9994      0.0005    0.9963     0.9650        0.0291              0.9313           0.2997        0.4524
+10          P7  L1-LR  nested      5   3743.0           76.0   0.9998      0.0001    0.9906     0.9294        0.1007              0.9299           0.2059        0.3678
+11          P7     RF  nested      5   3743.0           50.0   0.9994      0.0005    0.9954     0.9563        0.0147              0.9299           0.2059        0.3678
+12  core_fixed  L1-LR   fixed      5   1664.0           48.8   0.9997      0.0004    0.9954     0.9574        0.0261              1.0000           0.2738        0.6138
+13  core_fixed     RF   fixed      5   1664.0           50.0   0.9994      0.0004    0.9950     0.9515        0.0188              1.0000           0.2738        0.6138

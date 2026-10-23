@@ -371,3 +371,79 @@ def fig6_upset(sets: dict[str, set], max_subsets: int = 20) -> Path:
     fig.suptitle(f"DEG overlap between protocols (largest {len(sizes)} intersections)",
                  x=0.02, ha="left", fontsize=10, fontweight="bold")
     return save(fig, "fig6_upset.png")
+
+
+# ---------------------------------------------------------------- stage 6
+
+def fig8_term_jaccard(jac: dict, top_n: int = 20) -> Path:
+    """Jaccard similarity of the top enriched terms between protocols, 2 x 2 panels."""
+    style()
+    cmap = LinearSegmentedColormap.from_list("seqblue", SEQ_BLUE)
+    keys = list(jac)
+    fig, axes = plt.subplots(2, 2, figsize=(10, 9))
+    for ax, key in zip(axes.ravel(), keys):
+        m = jac[key]
+        im = ax.imshow(m.to_numpy(dtype=float), cmap=cmap, vmin=0, vmax=1)
+        ax.grid(False)
+        ax.set_xticks(range(len(m)), m.columns)
+        ax.set_yticks(range(len(m)), m.index)
+        ax.tick_params(length=0)
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        for i in range(len(m)):
+            for j in range(len(m)):
+                v = m.iloc[i, j]
+                ax.text(j, i, f"{v:.2f}", ha="center", va="center", fontsize=7,
+                        color=SURFACE if v > 0.6 else INK2)
+        lib, direction = key
+        ax.set_title(f"{lib.replace('_', ' ')} - {direction}", loc="left", fontsize=9)
+    cb = fig.colorbar(im, ax=axes, fraction=0.025, pad=0.02)
+    cb.set_label(f"Jaccard of top-{top_n} terms (FDR < 0.05)", color=INK2)
+    cb.outline.set_visible(False)
+    cb.ax.tick_params(colors=MUTED, labelsize=7)
+    fig.suptitle("Enriched-term overlap between protocols", x=0.02, ha="left",
+                 fontsize=11, fontweight="bold")
+    return save(fig, "fig8_term_jaccard.png")
+
+
+def fig9_classification(per_fold: pd.DataFrame, summary: pd.DataFrame) -> Path:
+    """Nested-CV ROC-AUC and F1 (normal class) per gene-selection protocol and model,
+    plus fold-to-fold stability (mean pairwise Jaccard) of the genes used."""
+    style()
+    names = ["P1", "P2", "P4", "P6", "P7", "P1_fixed", "core_fixed"]
+    names = [n for n in names if n in set(per_fold["name"])]
+    models = ["L1-LR", "RF"]
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4.2))
+    x = np.arange(len(names))
+    w = 0.36
+    for ax, metric, title in [(axes[0], "roc_auc", "A  ROC-AUC (outer folds)"),
+                              (axes[1], "f1_normal", "B  F1, normal class (outer folds)")]:
+        for i, m in enumerate(models):
+            for xi, n in zip(x, names):
+                v = per_fold[(per_fold["name"] == n) & (per_fold["model"] == m)][metric].to_numpy()
+                xs = np.full(len(v), xi + (i - 0.5) * w)
+                ax.scatter(xs, v, s=14, color=SERIES[i], alpha=0.7, linewidths=0, zorder=2,
+                           label=m if xi == 0 else None)
+                ax.hlines(v.mean(), xi + (i - 0.5) * w - 0.14, xi + (i - 0.5) * w + 0.14,
+                          color=INK, linewidth=1.4, zorder=3)
+        ax.set_xticks(x, names, rotation=30, ha="right")
+        ax.set_title(title, loc="left")
+        ax.grid(axis="x", visible=False)
+    axes[0].set_ylim(0.995, 1.0005)
+    axes[0].legend(loc="lower left", fontsize=7)
+    stab = summary.drop_duplicates("name").set_index("name").loc[names]
+    cols = [("stability_selected", "selected genes"), ("stability_L1-LR", "L1-LR nonzero"),
+            ("stability_RF", "RF top-50")]
+    w3 = 0.27
+    for i, (c, lab) in enumerate(cols):
+        axes[2].bar(x + (i - 1) * w3, stab[c].to_numpy(), width=w3 - 0.03, color=SERIES[i], label=lab)
+    axes[2].set_xticks(x, names, rotation=30, ha="right")
+    axes[2].set_ylim(0, 1.05)
+    axes[2].set_ylabel("mean pairwise Jaccard across folds")
+    axes[2].set_title("C  Gene stability across folds", loc="left")
+    axes[2].grid(axis="x", visible=False)
+    axes[2].legend(fontsize=7, loc="upper left")
+    fig.text(0.01, -0.04, "*_fixed: gene list chosen on all samples before CV (not nested; "
+             "selection stability is 1 by construction).", fontsize=7.5, color=MUTED)
+    fig.tight_layout()
+    return save(fig, "fig9_classification.png")
