@@ -279,7 +279,26 @@ def run_one(protocol: str, counts: pd.DataFrame, df: pd.DataFrame, is_tumor: np.
     if protocol == "P7":
         return dm.run_pydeseq2(dm.winsorize_counts(counts, meta["condition"].to_numpy()), meta,
                                "~condition", n_cpus)
+    if protocol == "P7g":  # sensitivity: Yang et al. winsorization with a global percentile
+        return dm.run_pydeseq2(dm.winsorize_counts(counts, None), meta, "~condition", n_cpus)
     raise ValueError(protocol)
+
+
+def run_extra(protocol: str, datasets: list[str], b_sub: int, n_cpus: int = 12, log=print) -> None:
+    """Run one extra protocol on given datasets (resumable; same result layout)."""
+    counts_all, samples, sets = load_context()
+    for ds in datasets:
+        df = sets[all_datasets()[ds][0]]
+        counts = counts_all[df.index]
+        labels = labels_for(ds, sets)
+        for rep in target_reps(ds, 100, b_sub):
+            path = result_path(ds, protocol, rep)
+            if path.exists():
+                continue
+            t0 = time.perf_counter()
+            res = run_one(protocol, counts, df, labels[rep].to_numpy(), n_cpus=n_cpus)
+            save_result(path, res, time.perf_counter() - t0)
+            log(f"{ds} {protocol} {rep} FP={int((res['FDR'] < 0.05).sum())} t={time.perf_counter() - t0:.0f}s")
 
 
 def load_context():

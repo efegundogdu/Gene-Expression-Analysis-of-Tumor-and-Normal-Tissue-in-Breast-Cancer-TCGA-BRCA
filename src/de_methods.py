@@ -190,7 +190,8 @@ def winsorize_counts(counts: pd.DataFrame, condition, q: float = 95) -> pd.DataF
     x = counts.to_numpy(dtype=float)
     sf = size_factors(counts.to_numpy())
     norm = x / sf
-    condition = np.asarray(condition)
+    # condition=None: one global percentile over all samples (sensitivity variant "P7g")
+    condition = np.zeros(x.shape[1]) if condition is None else np.asarray(condition)
     for c in pd.unique(condition):
         idx = condition == c
         cap = np.percentile(norm[:, idx], q, axis=1)

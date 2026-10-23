@@ -1,0 +1,14 @@
+{
+ "n_pairs": 89,
+ "n_samples": 178,
+ "n_plates": 14,
+ "wilcoxon_DEG": 3449,
+ "deseq_DEG": 3471,
+ "both_any_direction": 3262,
+ "direction_conflicts": 0,
+ "reference_up": 1137,
+ "reference_down": 2125,
+ "reference_total": 3262,
+ "seconds_wilcoxon": 0.26763990009203553,
+ "seconds_deseq": 111.242368599982
+}

@@ -48,6 +48,23 @@ limitations) is written in Stage 7. Method notes are collected here as decisions
   Null C: a residual label correlation remains (mean 0.07 full, 0.11 subsample) through
   differing tumor fractions between batch groups, and FP counts rise with it (Spearman
   0.83 for P1), so Null C mixes batch and biological signal.
+- **P7 global vs within-condition winsorization** (`results/tables/p7_winsorization_comparison.csv`).
+  A sensitivity variant "P7g" uses one global 95th percentile (otherwise the Yang et al.
+  procedure). On the Null A subsample (B = 50, paired replicates) P7g cut false positives
+  by 94% vs P1 at FDR < 0.05 (357 -> 21) and by 98.7% with |log2FC| > 1, in line with Yang
+  et al. (98.2% fewer DEGs for DESeq2 at the 93rd percentile). Within-condition P7 cut them
+  by only 3% (347). On real labels P7g finds fewer DEGs (3401 vs 3785 for P7 on the
+  subsample). P7 in the main tables remains the within-condition version.
+- **Stage 5 reference** (`src/benchmark.py`): the 89 same-plate tumor/normal pairs (178
+  samples, 14 plates). Wilcoxon signed-rank on per-patient differences of log2(norm + 1)
+  (log2FC = median difference) and PyDESeq2 `~ patient + condition`; reference = DEG
+  (FDR < 0.05, |log2FC| > 1) in both, same direction. A protocol DEG is a true positive only
+  with the same direction. Caveats: the 178 reference samples are also part of the full
+  data the protocols use, and the Wilcoxon half of the reference uses a median-based
+  log2FC, which favours the rank protocols' median log2FC; `benchmark_common_lfc.csv`
+  repeats the benchmark with the shared DESeq2 log2FC.
+- **UpSet plot** (Fig 6): intersection sizes come from `upsetplot.query`; the figure is
+  drawn with matplotlib because upsetplot 0.9.0 plotting fails under pandas 3.
 - **ComBat-seq** runs in R 4.6.1 with Bioconductor sva 3.60.0 through Rscript
   (inmoose has no Windows wheel).
 

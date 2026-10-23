@@ -276,3 +276,98 @@ def fig5_false_positives(summary: pd.DataFrame) -> Path:
     fig.text(0.99, 0.01, "P4, P6: full data (B = 100); P1, P2, P3, P5, P7: subsamples (B = 50)",
              fontsize=7.5, color=MUTED, ha="right")
     return save(fig, "fig5_false_positives.png")
+
+
+# ---------------------------------------------------------------- stage 5
+
+DIVERGING = ["#184f95", "#3987e5", "#9ec5f4", "#f0efec", "#f2a3a2", "#e34948", "#a32a2a"]
+
+
+def fig7_markers(markers: pd.DataFrame, protocols: list[str]) -> Path:
+    """Canonical markers: log2FC per protocol (and reference); mark = found as DEG in the
+    expected direction, cross = not."""
+    style()
+    cols = ["reference"] + protocols
+    vals = np.column_stack([markers["reference_log2FC"].to_numpy()] +
+                           [markers[f"{p}_log2FC"].to_numpy() for p in protocols])
+    ok = np.column_stack([(markers["reference"] == markers["expected"]).to_numpy()] +
+                         [markers[f"{p}_direction_ok"].to_numpy() for p in protocols])
+    lim = float(np.ceil(np.nanmax(np.abs(vals))))
+    cmap = LinearSegmentedColormap.from_list("div", DIVERGING)
+    fig, ax = plt.subplots(figsize=(7.6, 3.0))
+    im = ax.imshow(vals, cmap=cmap, vmin=-lim, vmax=lim, aspect="auto")
+    ax.grid(False)
+    ax.set_xticks(range(len(cols)), cols)
+    ylabels = [f"{g} ({'up' if e == 'up' else 'down'})" for g, e in markers["expected"].items()]
+    ax.set_yticks(range(len(markers)), ylabels)
+    ax.tick_params(length=0)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    for i in range(vals.shape[0]):
+        for j in range(vals.shape[1]):
+            mark = "✓" if ok[i, j] else "✗"
+            ax.text(j, i, f"{vals[i, j]:.1f} {mark}", ha="center", va="center", fontsize=7.5,
+                    color=SURFACE if abs(vals[i, j]) > lim * 0.55 else INK)
+    ax.axvline(0.5, color=SURFACE, linewidth=3)
+    ax.set_title("Canonical markers: log2FC and recovery (✓ = DEG in expected direction)", loc="left")
+    cb = fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02)
+    cb.set_label("log2FC tumor vs normal", color=INK2)
+    cb.outline.set_visible(False)
+    cb.ax.tick_params(colors=MUTED, labelsize=7)
+    return save(fig, "fig7_markers.png")
+
+
+def fig6_upset(sets: dict[str, set], max_subsets: int = 20) -> Path:
+    """UpSet plot of protocol DEG sets (largest intersections).
+
+    Intersection sizes come from upsetplot.query; drawing is done here with matplotlib
+    because upsetplot 0.9.0's own plotting breaks under pandas 3 (copy-on-write).
+    """
+    from upsetplot import from_contents, query
+    style()
+    names = list(sets)
+    q = query(from_contents(sets), sort_by="cardinality")
+    sizes = q.subset_sizes
+    sizes = sizes[sizes > 0].iloc[:max_subsets]
+    member = np.array([[bool(v) for v in idx] for idx in sizes.index])  # subsets x sets
+    level_names = list(sizes.index.names)
+    member = member[:, [level_names.index(n) for n in names]]
+    totals = np.array([len(sets[n]) for n in names])
+
+    fig = plt.figure(figsize=(11, 5.6))
+    gs = fig.add_gridspec(2, 2, width_ratios=[1.4, 6], height_ratios=[3, 2], wspace=0.10, hspace=0.05)
+    ax_bar = fig.add_subplot(gs[0, 1])
+    ax_mat = fig.add_subplot(gs[1, 1], sharex=ax_bar)
+    ax_tot = fig.add_subplot(gs[1, 0], sharey=ax_mat)
+    x = np.arange(len(sizes))
+    ax_bar.bar(x, sizes.to_numpy(), color=SERIES[0], width=0.6)
+    for xi, v in zip(x, sizes.to_numpy()):
+        ax_bar.text(xi, v, f"{v}", ha="center", va="bottom", fontsize=6.5, color=INK2)
+    ax_bar.set_ylabel("genes in intersection")
+    ax_bar.grid(axis="x", visible=False)
+    ax_bar.tick_params(axis="x", bottom=False, labelbottom=False)
+    ax_bar.spines["bottom"].set_visible(False)
+    y = np.arange(len(names))
+    for xi in x:
+        on = member[xi]
+        ax_mat.scatter(np.full(len(names), xi), y, s=36, c=np.where(on, INK, GRID), zorder=2)
+        if on.sum() > 1:
+            ys = y[on]
+            ax_mat.plot([xi, xi], [ys.min(), ys.max()], color=INK, linewidth=1.6, zorder=1)
+    ax_mat.set_yticks(y, names)
+    ax_mat.set_ylim(-0.6, len(names) - 0.4)
+    ax_mat.invert_yaxis()
+    ax_mat.grid(False)
+    ax_mat.tick_params(axis="x", bottom=False, labelbottom=False)
+    ax_mat.tick_params(axis="y", length=0)
+    for sp in ax_mat.spines.values():
+        sp.set_visible(False)
+    ax_tot.barh(y, totals, color=OTHER, height=0.6)
+    ax_tot.invert_xaxis()
+    ax_tot.set_xlabel("DEGs", fontsize=8)
+    ax_tot.tick_params(axis="y", left=False, labelleft=False)
+    ax_tot.grid(axis="y", visible=False)
+    ax_tot.spines["left"].set_visible(False)
+    fig.suptitle(f"DEG overlap between protocols (largest {len(sizes)} intersections)",
+                 x=0.02, ha="left", fontsize=10, fontweight="bold")
+    return save(fig, "fig6_upset.png")

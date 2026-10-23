@@ -1,0 +1,152 @@
+real_subA P7g real FP=12679 t=17s
+A_sub P7g r000 FP=18 t=13s
+A_sub P7g r001 FP=21 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r002 FP=106 t=17s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r003 FP=23 t=20s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r004 FP=15 t=22s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r005 FP=17 t=21s
+A_sub P7g r006 FP=11 t=21s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r007 FP=19 t=19s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r008 FP=15 t=15s
+A_sub P7g r009 FP=17 t=16s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r010 FP=16 t=16s
+A_sub P7g r011 FP=40 t=16s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r012 FP=14 t=17s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r013 FP=11 t=18s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r014 FP=10 t=15s
+A_sub P7g r015 FP=18 t=17s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r016 FP=19 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r017 FP=17 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r018 FP=15 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r019 FP=18 t=15s
+A_sub P7g r020 FP=29 t=14s
+A_sub P7g r021 FP=14 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r022 FP=17 t=14s
+A_sub P7g r023 FP=13 t=14s
+A_sub P7g r024 FP=16 t=15s
+A_sub P7g r025 FP=28 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r026 FP=13 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r027 FP=14 t=15s
+A_sub P7g r028 FP=12 t=15s
+A_sub P7g r029 FP=16 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r030 FP=23 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r031 FP=16 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r032 FP=25 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r033 FP=14 t=15s
+A_sub P7g r034 FP=11 t=15s
+A_sub P7g r035 FP=21 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r036 FP=32 t=15s
+A_sub P7g r037 FP=18 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r038 FP=11 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r039 FP=8 t=14s
+A_sub P7g r040 FP=13 t=15s
+A_sub P7g r041 FP=76 t=14s
+A_sub P7g r042 FP=18 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r043 FP=12 t=15s
+A_sub P7g r044 FP=33 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r045 FP=17 t=14s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r046 FP=13 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r047 FP=15 t=15s
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+C:\Users\gundo\Desktop\Gene-Expression-Analysis-of-Tumor-and-Normal-Tissue-in-Breast-Cancer-TCGA-BRCA\.venv\Lib\site-packages\pydeseq2\utils.py:1088: RuntimeWarning: overflow encountered in exp
+  counts - (counts + size) / (1 + size * np.exp(-xbeta - offset))
+A_sub P7g r048 FP=23 t=15s
+A_sub P7g r049 FP=42 t=14s
+P7g done
