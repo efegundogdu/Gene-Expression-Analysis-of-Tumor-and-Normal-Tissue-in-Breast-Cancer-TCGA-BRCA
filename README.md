@@ -129,6 +129,26 @@ FDR < 0.05 (Table 1: `results/tables/summary.csv`).
    - The robust core signature has 1664 genes (v1; 2010 genes in v2) and classifies as
      well as the full P1 list with about half the genes.
 
+## Figures
+
+False positives per protocol under the three nulls (Fig 5):
+
+![Fig 5: false positives per protocol](results/figures/fig5_false_positives.png)
+
+Batch structure (Fig 2, PCA by condition, plate and TSS):
+
+![Fig 2: PCA](results/figures/fig2_pca.png)
+
+All figures (300 dpi PNG) in `results/figures/`:
+[Fig 2 PCA](results/figures/fig2_pca.png) ·
+[Fig 3 plate x condition](results/figures/fig3_plate_condition_heatmap.png) ·
+[Fig 4 DEG counts](results/figures/fig4_deg_counts.png) ·
+[Fig 5 false positives](results/figures/fig5_false_positives.png) ·
+[Fig 6 UpSet](results/figures/fig6_upset.png) ·
+[Fig 7 markers](results/figures/fig7_markers.png) ·
+[Fig 8 enriched-term overlap](results/figures/fig8_term_jaccard.png) ·
+[Fig 9 classification](results/figures/fig9_classification.png)
+
 ## Limitations
 
 - **Null B composition.** Tumor subtypes or tissue composition (e.g. adipose content)
@@ -160,8 +180,15 @@ FDR < 0.05 (Table 1: `results/tables/summary.csv`).
   *Biostatistics* 17(1):29-39 (2016).
 - van Elteren PH. On the combination of independent two-sample tests of Wilcoxon.
   *Bulletin of the International Statistical Institute* 37:351-361 (1960).
-- Chen et al. (2026), TCGA batch effects. *Full citation to be added.*
-- Liang et al., van Elteren test for single-cell data. *Full citation to be added.*
+- Chen Z, Nersisyan S, Rigoutsos I, Londin E. Systematic Evaluation of Batch Effects in
+  The Cancer Genome Atlas Program Underscores the Need for Batch-Controlled Analysis.
+  Alpha Omega Alpha Research Symposium Posters, 16. Thomas Jefferson University; 2026.
+  https://jdc.jefferson.edu/aoa_research_symposium_posters/16 (conference poster, not
+  peer-reviewed).
+- Liang S, Liang Q, Chen R, Chen K. Stratified Test Accurately Identifies Differentially
+  Expressed Genes Under Batch Effects in Single-Cell Data. *IEEE/ACM Transactions on
+  Computational Biology and Bioinformatics* 18(6):2072-2079 (2021).
+  doi:10.1109/TCBB.2021.3094650
 
 ## Method details and decisions
 
