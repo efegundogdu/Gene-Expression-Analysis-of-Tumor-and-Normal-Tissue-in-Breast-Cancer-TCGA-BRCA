@@ -86,7 +86,11 @@ limitations) is written in Stage 7. Method notes are collected here as decisions
   of them (964 genes; 674 removed through P5, 346 only through P5) -> 1664 genes. The
   adipocyte markers ADH1B, FABP4 and LEP drop out because P5 flags them in 12-22% of B-conf
   replicates (0% for P6), i.e. the P5 (ComBat-seq + Wilcoxon) false positives drive most
-  of the filtering.
+  of the filtering. **Version 2** (`results/tables/robust_core_v2.csv`) keeps the
+  four-protocol DEG/direction rule but applies the B-conf filter only to P2, P3 and P6:
+  2010 genes (810 up, 1200 down; a superset of v1). ADH1B and FABP4 return; LEP stays out
+  (6% of B-conf replicates in P2 and P3). The 346 added genes agree with the paired
+  reference in 98.6% of cases (v1 overall: 94.9%).
 - **ComBat-seq** runs in R 4.6.1 with Bioconductor sva 3.60.0 through Rscript
   (inmoose has no Windows wheel).
 

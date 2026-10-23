@@ -410,7 +410,7 @@ def fig9_classification(per_fold: pd.DataFrame, summary: pd.DataFrame) -> Path:
     """Nested-CV ROC-AUC and F1 (normal class) per gene-selection protocol and model,
     plus fold-to-fold stability (mean pairwise Jaccard) of the genes used."""
     style()
-    names = ["P1", "P2", "P4", "P6", "P7", "P1_fixed", "core_fixed"]
+    names = ["P1", "P2", "P4", "P6", "P7", "P1_fixed", "core_fixed", "core_v2_fixed"]
     names = [n for n in names if n in set(per_fold["name"])]
     models = ["L1-LR", "RF"]
     fig, axes = plt.subplots(1, 3, figsize=(14, 4.2))

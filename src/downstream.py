@@ -32,6 +32,9 @@ ENRICHR_DIR = PROCESSED / "enrichr"
 LIBRARIES = ["GO_Biological_Process_2023", "KEGG_2021_Human"]
 TOP_TERMS = 20
 ROBUST_PROTOCOLS = ["P2", "P3", "P5", "P6"]
+# v2 of the core: B-conf frequency filter without P5, whose own batch-driven false
+# positives (ComBat-seq with confounded labels) would otherwise remove genes
+ROBUST_FILTER_V2 = ["P2", "P3", "P6"]
 ROBUST_MAX_CONF_FREQ = 0.05
 
 
@@ -94,16 +97,19 @@ def run_enrichment(protocols=dm.PROTOCOLS) -> dict:
 
 # ---------------------------------------------------------------- robust core signature
 
-def robust_core(protocols=ROBUST_PROTOCOLS, max_freq=ROBUST_MAX_CONF_FREQ) -> pd.DataFrame:
+def robust_core(protocols=ROBUST_PROTOCOLS, max_freq=ROBUST_MAX_CONF_FREQ,
+                filter_protocols=None, name: str = "robust_core") -> pd.DataFrame:
     """DEG in every protocol of `protocols` with the same direction, and significant in
-    fewer than `max_freq` of the B-conf replicates for each of them (Stage 4)."""
+    fewer than `max_freq` of the B-conf replicates (Stage 4) for each protocol in
+    `filter_protocols` (default: all of `protocols`)."""
+    filter_protocols = list(filter_protocols or protocols)
     res = {p: dm.load_protocol(p) for p in protocols}
     bs = pd.read_csv(TABLES / "batch_sensitive_genes.csv", index_col="gene_id")
     genes = res[protocols[0]].index
     dirs = pd.DataFrame({p: res[p]["direction"].fillna("").reindex(genes) for p in protocols})
     same = (dirs.nunique(axis=1) == 1) & (dirs[protocols[0]].isin(["up", "down"]))
     freqs = pd.DataFrame({p: bs.loc[genes, f"freq_conf_{p}"] for p in protocols})
-    stable = (freqs < max_freq).all(axis=1)
+    stable = (freqs[filter_protocols] < max_freq).all(axis=1)
     keep = same & stable
     out = pd.DataFrame({"gene_name": res[protocols[0]].loc[genes, "gene_name"],
                         "direction": dirs[protocols[0]]}, index=genes)
@@ -113,13 +119,13 @@ def robust_core(protocols=ROBUST_PROTOCOLS, max_freq=ROBUST_MAX_CONF_FREQ) -> pd
         out[f"freq_conf_{p}"] = freqs[p]
     out = out[keep].sort_values(["direction", "log2FC_P2"], ascending=[False, False])
     out.index.name = "gene_id"
-    out.to_csv(TABLES / "robust_core.csv")
-    info = {"protocols": protocols, "max_conf_freq": max_freq,
+    out.to_csv(TABLES / f"{name}.csv")
+    info = {"protocols": protocols, "filter_protocols": filter_protocols, "max_conf_freq": max_freq,
             "DEG_all_same_direction": int(same.sum()),
             "dropped_batch_frequent": int((same & ~stable).sum()),
             "robust_core": int(keep.sum()), "up": int((out["direction"] == "up").sum()),
             "down": int((out["direction"] == "down").sum())}
-    (TABLES / "robust_core_info.json").write_text(json.dumps(info, indent=1))
+    (TABLES / f"{name}_info.json").write_text(json.dumps(info, indent=1))
     return out
 
 
@@ -287,12 +293,15 @@ def run_all(n_cpus: int = 12) -> dict:
     enr = run_enrichment()
     fig8 = plots.fig8_term_jaccard(enr["jaccard"], TOP_TERMS)
     core = robust_core()
+    core_v2 = robust_core(filter_protocols=ROBUST_FILTER_V2, name="robust_core_v2")
     p1 = dm.load_protocol("P1")
-    fixed = {"core_fixed": core.index.tolist(), "P1_fixed": p1.index[p1["is_DEG"]].tolist()}
+    fixed = {"core_fixed": core.index.tolist(), "core_v2_fixed": core_v2.index.tolist(),
+             "P1_fixed": p1.index[p1["is_DEG"]].tolist()}
     summ = run_classification(fixed_lists=fixed, n_cpus=n_cpus)
     per_fold = pd.read_csv(TABLES / "classification_per_fold.csv")
     fig9 = plots.fig9_classification(per_fold, summ)
-    return {"enrichment": enr, "fig8": fig8, "robust_core": core, "classification": summ,
+    return {"enrichment": enr, "fig8": fig8, "robust_core": core, "robust_core_v2": core_v2,
+            "classification": summ,
             "fig9": fig9}
 
 

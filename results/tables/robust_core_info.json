@@ -5,6 +5,12 @@
   "P5",
   "P6"
  ],
+ "filter_protocols": [
+  "P2",
+  "P3",
+  "P5",
+  "P6"
+ ],
  "max_conf_freq": 0.05,
  "DEG_all_same_direction": 2628,
  "dropped_batch_frequent": 964,
