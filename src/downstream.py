@@ -55,6 +55,8 @@ def enrich(genes: list[str], library: dict, background: list[str]) -> pd.DataFra
     res = gp.enrichr(gene_list=genes, gene_sets=library, background=background,
                      outdir=None, no_plot=True, verbose=False)
     df = res.results.sort_values(["Adjusted P-value", "P-value"]).reset_index(drop=True)
+    # gseapy lists overlap genes in set order, which changes between runs; sort them
+    df["Genes"] = df["Genes"].astype(str).str.split(";").apply(lambda g: ";".join(sorted(g)))
     return df
 
 
