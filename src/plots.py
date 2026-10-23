@@ -239,3 +239,40 @@ def fig_deg_jaccard(jac: pd.DataFrame) -> Path:
     cb.outline.set_visible(False)
     cb.ax.tick_params(colors=MUTED, labelsize=7)
     return save(fig, "figS_deg_jaccard.png")
+
+
+# ---------------------------------------------------------------- stage 4
+
+NULL_SERIES = [("FP_A", "Null A: shuffled labels"), ("FP_rand", "Null B-rand: tumors, random fake normals"),
+               ("FP_conf", "Null B-conf: tumors, plate-confounded fake normals")]
+
+
+def fig5_false_positives(summary: pd.DataFrame) -> Path:
+    """FP per protocol under the three nulls, mean with 95% bootstrap CI; one panel per
+    threshold. Symlog y axis so that near-zero rank-test values stay visible."""
+    style()
+    thresholds = list(dict.fromkeys(summary["threshold"]))
+    fig, axes = plt.subplots(1, len(thresholds), figsize=(13, 4.4), sharey=True)
+    for ax, thr in zip(np.atleast_1d(axes), thresholds):
+        d = summary[summary["threshold"] == thr].set_index("protocol")
+        x = np.arange(len(d))
+        w = 0.27
+        for i, (key, label) in enumerate(NULL_SERIES):
+            mean = d[key].to_numpy()
+            err = np.vstack([mean - d[f"{key}_ci_lo"].to_numpy(), d[f"{key}_ci_hi"].to_numpy() - mean])
+            ax.bar(x + (i - 1) * w, mean, width=w - 0.03, color=SERIES[i], label=label, zorder=2)
+            ax.errorbar(x + (i - 1) * w, mean, yerr=np.clip(err, 0, None), fmt="none",
+                        ecolor=INK2, elinewidth=0.8, capsize=2, zorder=3)
+        ax.set_yscale("symlog", linthresh=1)
+        ax.set_yticks([0, 1, 10, 100, 1000], ["0", "1", "10", "100", "1000"])
+        ax.set_ylim(0, 3000)
+        ax.set_xticks(x, d.index)
+        ax.grid(axis="x", visible=False)
+        ax.set_title(f"{thr}", loc="left")
+    np.atleast_1d(axes)[0].set_ylabel("false positives per null dataset (mean, 95% CI)")
+    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    handles, labels = np.atleast_1d(axes)[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="lower left", ncols=3, fontsize=8, bbox_to_anchor=(0.01, 0.0))
+    fig.text(0.99, 0.01, "P4, P6: full data (B = 100); P1, P2, P3, P5, P7: subsamples (B = 50)",
+             fontsize=7.5, color=MUTED, ha="right")
+    return save(fig, "fig5_false_positives.png")

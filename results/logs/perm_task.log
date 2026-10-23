@@ -1,0 +1,38 @@
+Per 22.10.2026 19:39:03,06 task start 
+Per 22.10.2026 19:41:55,35 runner exited with code 0 
+protocol          P1   P2   P3   P4   P5   P6   P7
+dataset                                           
+A_full           NaN  NaN  NaN  100  NaN  100  NaN
+A_sub             19   19   23   18   24   18   18
+Bconf_full       NaN  NaN  NaN    1  NaN    1  NaN
+Bconf_sub          1    1    1    1    1    1    1
+Brand_full       NaN  NaN  NaN    1  NaN    1  NaN
+Brand_sub          1    1    1    1    1    1    1
+C_full           NaN  NaN  NaN    1  NaN    1  NaN
+C_sub              1    1    1    1    1    1    1
+real_mixed_full  NaN  NaN  NaN    1  NaN    1  NaN
+real_mixed_subA    1    1    1    1    1    1    1
+real_subA          1    1    1    1    1    1    1
+
+total: 382 / 2216 protocol runs (b_full=100, b_sub=50)
+incomplete
+SUCCESS: The scheduled task "TCGA_BRCA_permutation" was successfully deleted.
+Per 22.10.2026 19:43:24,46 task start 
+Cum 23.10.2026  4:30:14,00 runner exited with code 0 
+protocol          P1   P2   P3   P4   P5   P6   P7
+dataset                                           
+A_full           NaN  NaN  NaN  100  NaN  100  NaN
+A_sub             50   50   50   50   50   50   50
+Bconf_full       NaN  NaN  NaN  100  NaN  100  NaN
+Bconf_sub         50   50   50   50   50   50   50
+Brand_full       NaN  NaN  NaN  100  NaN  100  NaN
+Brand_sub         50   50   50   50   50   50   50
+C_full           NaN  NaN  NaN  100  NaN  100  NaN
+C_sub             50   50   50   50   50   50   50
+real_mixed_full  NaN  NaN  NaN    1  NaN    1  NaN
+real_mixed_subA    1    1    1    1    1    1    1
+real_subA          1    1    1    1    1    1    1
+
+total: 2216 / 2216 protocol runs (b_full=100, b_sub=50)
+complete
+SUCCESS: The scheduled task "TCGA_BRCA_permutation" was successfully deleted.

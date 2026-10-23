@@ -520,9 +520,15 @@ def main(argv=None):
     r.add_argument("--r-worker-gb", type=float, default=1.3)
     r.add_argument("--reserve-gb", type=float, default=2.0)
     st = sub.add_parser("status")
+    sm = sub.add_parser("summary")
     args = ap.parse_args(argv)
     if args.cmd == "status":
         print_status()
+        return
+    if args.cmd == "summary":
+        res = run_summary()
+        print(res["summary"][["protocol", "threshold", "FP_A", "FP_rand", "FP_conf", "FP_batch",
+                              "FP_C", "FDR_A"]].round(3).to_string(index=False))
         return
     if args.cmd == "labels":
         _, samples, sets = load_context()
@@ -547,6 +553,133 @@ def main(argv=None):
         log(f"run start: b_full={args.b_full} b_sub={args.b_sub} n_cpus={args.n_cpus}")
         run(args.datasets, args.b_full, args.b_sub, args.n_cpus, args.max_workers,
             args.r_worker_gb, args.reserve_gb, log)
+
+
+
+# ---------------------------------------------------------------- summary (after the run)
+
+FDR_CUT, LFC_CUT = 0.05, 1.0
+PROTOCOL_ORDER = ["P1", "P2", "P3", "P4", "P5", "P6", "P7"]
+
+
+def load_npz(ds: str, p: str, rep: str) -> tuple[np.ndarray, np.ndarray]:
+    z = np.load(result_path(ds, p, rep))
+    return dm.bh(z["pvalue"]), z["log2FC"].astype(float)
+
+
+def collect_fp(datasets=None) -> tuple[pd.DataFrame, dict]:
+    """Per replicate FP counts at both thresholds; also per-gene hit counts (FDR < 0.05)."""
+    cfg = json.loads(RUN_CONFIG.read_text())
+    rows, gene_hits = [], {}
+    for ds, (_, protocols) in DATASETS.items():
+        if datasets and ds not in datasets:
+            continue
+        for p in protocols:
+            hits = None
+            for rep in target_reps(ds, cfg["b_full"], cfg["b_sub"]):
+                fdr, lfc = load_npz(ds, p, rep)
+                sig = fdr < FDR_CUT
+                rows.append({"dataset": ds, "protocol": p, "rep": rep,
+                             "FP_fdr": int(sig.sum()),
+                             "FP_fdr_lfc": int((sig & (np.abs(lfc) > LFC_CUT)).sum())})
+                hits = sig.astype(int) if hits is None else hits + sig
+            gene_hits[(ds, p)] = hits
+    return pd.DataFrame(rows), gene_hits
+
+
+def boot_ci(x: np.ndarray, n_boot: int = 2000, seed: int = SEED) -> tuple[float, float]:
+    rng = np.random.default_rng(seed)
+    x = np.asarray(x, float)
+    means = rng.choice(x, size=(n_boot, len(x)), replace=True).mean(axis=1)
+    return float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))
+
+
+def real_counts(dataset_real: str | None, protocol: str) -> tuple[int, int]:
+    """(n FDR < 0.05, n DEG) for real labels; None -> full-data Stage 3 tables."""
+    if dataset_real is None:
+        r = dm.load_protocol(protocol)
+        return int((r["FDR"] < FDR_CUT).sum()), int(r["is_DEG"].sum())
+    fdr, lfc = load_npz(dataset_real, protocol, "real")
+    sig = fdr < FDR_CUT
+    return int(sig.sum()), int((sig & (np.abs(lfc) > LFC_CUT)).sum())
+
+
+def main_dataset(null: str, protocol: str) -> str:
+    """Rank protocols P4/P6 are evaluated on the full sets, the rest on subsamples."""
+    tag = "full" if protocol in RANK_SET else "sub"
+    return f"{null}_{tag}"
+
+
+def summarize_fp(fp: pd.DataFrame) -> pd.DataFrame:
+    """One row per protocol x threshold: FP_A, FP_rand, FP_conf, FP_batch, FP_C, FDR_A."""
+    rows = []
+    for metric, thr in [("FP_fdr", "FDR<0.05"), ("FP_fdr_lfc", "FDR<0.05 & |log2FC|>1")]:
+        for p in PROTOCOL_ORDER:
+            row = {"protocol": p, "threshold": thr}
+            for null in ["A", "Brand", "Bconf", "C"]:
+                ds = main_dataset(null, p)
+                x = fp[(fp["dataset"] == ds) & (fp["protocol"] == p)].sort_values("rep")[metric].to_numpy()
+                lo, hi = boot_ci(x)
+                key = {"A": "FP_A", "Brand": "FP_rand", "Bconf": "FP_conf", "C": "FP_C"}[null]
+                row.update({key: x.mean(), f"{key}_median": float(np.median(x)), f"{key}_ci_lo": lo,
+                            f"{key}_ci_hi": hi, f"{key}_frac_reps_any": float((x > 0).mean()),
+                            f"{key}_dataset": ds, f"{key}_B": len(x)})
+                if null == "Brand":
+                    rand = x
+                if null == "Bconf":
+                    diff = x - rand  # same replicate: same samples, same number of fake normals
+                    lo, hi = boot_ci(diff)
+                    row.update({"FP_batch": diff.mean(), "FP_batch_ci_lo": lo, "FP_batch_ci_hi": hi})
+            real_ds = None if p in RANK_SET else "real_subA"
+            n_sig, n_deg = real_counts(real_ds, p)
+            n_real = n_sig if metric == "FP_fdr" else n_deg
+            row.update({"real_positives": n_real, "real_dataset": real_ds or "full (Stage 3)",
+                        "FDR_A": row["FP_A"] / n_real if n_real else np.nan})
+            rows.append(row)
+    return pd.DataFrame(rows)
+
+
+def batch_sensitive_genes(gene_hits: dict, genes: pd.DataFrame, index: pd.Index,
+                          cut: float = 0.10) -> pd.DataFrame:
+    """Per gene: share of B-conf (and B-rand) replicates in which it is significant
+    (FDR < 0.05); batch-sensitive if the B-conf share is >= cut."""
+    cfg = json.loads(RUN_CONFIG.read_text())
+    out = pd.DataFrame(index=index)
+    out.insert(0, "gene_name", genes.loc[index, "gene_name"].to_numpy())
+    for p in PROTOCOL_ORDER:
+        for null, tag in [("Bconf", "conf"), ("Brand", "rand")]:
+            ds = main_dataset(null, p)
+            b = cfg["b_full"] if ds.endswith("_full") else cfg["b_sub"]
+            out[f"freq_{tag}_{p}"] = gene_hits[(ds, p)] / b
+        out[f"batch_sensitive_{p}"] = out[f"freq_conf_{p}"] >= cut
+        # stricter: frequent under confounded labels but not under random labels
+        out[f"batch_specific_{p}"] = out[f"batch_sensitive_{p}"] & (out[f"freq_rand_{p}"] < cut)
+    out["n_protocols_batch_sensitive"] = out[[f"batch_sensitive_{p}" for p in PROTOCOL_ORDER]].sum(axis=1)
+    out.index.name = "gene_id"
+    return out
+
+
+def run_summary() -> dict:
+    """Stage 4 tables and Fig 5 from the saved replicate results."""
+    import pickle
+    import plots
+    fp, hits = collect_fp()
+    fp.to_csv(TABLES / "perm_fp_per_replicate.csv", index=False)
+    with open(PERM / "gene_hits.pkl", "wb") as fh:
+        pickle.dump(hits, fh)
+    summary = summarize_fp(fp)
+    summary.to_csv(TABLES / "perm_summary.csv", index=False)
+    idx = pd.read_parquet(PROCESSED / "counts_filtered.parquet", columns=[]).index
+    genes = pd.read_parquet(PROCESSED / "genes.parquet")
+    bs = batch_sensitive_genes(hits, genes, idx)
+    bs.to_csv(TABLES / "batch_sensitive_genes.csv")
+    diag = pd.read_csv(PERM / "label_diagnostics.csv")
+    diag.groupby("null").agg(n=("n", "first"), fake_normal=("n_fake_normal", "mean"),
+                             V_mean=("V_plate", "mean"), V_sd=("V_plate", "std"),
+                             corr_with_truth_mean=("corr_with_truth", "mean"),
+                             corr_with_truth_sd=("corr_with_truth", "std"))         .to_csv(TABLES / "perm_label_diagnostics.csv")
+    fig = plots.fig5_false_positives(summary)
+    return {"fp": fp, "summary": summary, "batch_sensitive": bs, "fig": fig}
 
 
 if __name__ == "__main__":

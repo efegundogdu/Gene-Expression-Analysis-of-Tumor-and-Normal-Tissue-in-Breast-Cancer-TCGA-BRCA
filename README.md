@@ -24,6 +24,30 @@ limitations) is written in Stage 7. Method notes are collected here as decisions
 - **Replicates.** Rank protocols on the full sets (P4, P6): B = 100. Subsample protocols
   (P1, P2, P3, P5, P7, plus P4/P6 on the subsamples as a check): B = 50, because of
   the DESeq2 and ComBat-seq cost (~6 h on 14 cores / 32 GB RAM).
+- **Stage 4 null designs** (`src/permutation.py`, summary: `python src/permutation.py summary`).
+  Null A shuffles tumor/normal labels over all samples. Null B uses tumors only (one per
+  patient; every DEG is false): B-rand picks fake normals at random, B-conf mimics the real
+  plate structure (~20% of fake normals on plates that become fake-normal-only, the rest on
+  "mixed" plates at real normal fractions) and is redrawn until its plate x label Cramér's V
+  is within 0.03 of the real data's V (0.552 full, 0.630 subsample). Both use the same
+  samples and the same number of fake normals (9.35%); batch groups are rebuilt on the
+  tumor-only sets with the Stage 2 rule. FP_batch = FP_conf - FP_rand, paired by replicate.
+  Null C (secondary) shuffles labels within the 15 batch groups that hold both conditions.
+  The original "restricted permutation over all batch groups" was dropped: single-condition
+  groups keep their true labels, so permuted and true labels correlated at 0.29 (full) and
+  0.44 (subsample) and real biology leaked into the null. Subsamples: Null A all 113
+  normals + 339 random tumors; Null B 452 random tumors. FDR_A = mean FP_A / number of
+  real-label positives on the same samples (subsample real run for P1-P3, P5, P7; full
+  Stage 3 results for P4, P6). Error bars are 95% bootstrap CIs over replicates (seed 42).
+- **Batch-sensitive genes** (`results/tables/batch_sensitive_genes.csv`): significant
+  (FDR < 0.05) in >= 10% of B-conf replicates of a protocol. `batch_specific_*` additionally
+  requires < 10% of B-rand replicates, separating batch-driven genes from genes that a
+  method flags under any random labelling.
+- **Limitations of the null designs.** Null B: tumor subtypes may be unevenly spread over
+  plates, so part of FP_conf can come from biology tied to plates rather than technical batch.
+  Null C: a residual label correlation remains (mean 0.07 full, 0.11 subsample) through
+  differing tumor fractions between batch groups, and FP counts rise with it (Spearman
+  0.83 for P1), so Null C mixes batch and biological signal.
 - **ComBat-seq** runs in R 4.6.1 with Bioconductor sva 3.60.0 through Rscript
   (inmoose has no Windows wheel).
 
